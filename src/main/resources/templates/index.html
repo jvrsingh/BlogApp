@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Enterprise Blog</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <div class="bg-controls">
+      <button id="themeToggleBtn" title="Toggle Dark/Light Mode"></button>
+      <button id="configureGDriveBtn" title="Configure Cloud Background">
+        Background Settings
+      </button>
+    </div>
+
+    <div id="modalBackdrop"></div>
+    <form id="gDriveConfigForm" autocomplete="off">
+      <h3>Google Drive Backgrounds</h3>
+      <label>
+        Direct Link Template<br />
+        <small>
+          Use <b>FILE_ID_HERE</b>, e.g.
+          <tt>https://drive.google.com/uc?export=view&id=FILE_ID_HERE</tt>
+        </small>
+        <input
+          id="gDriveBaseUrl"
+          type="text"
+          required
+          placeholder=".../uc?export=view&id=FILE_ID_HERE"
+        />
+      </label>
+      <label>
+        Comma-separated Image File IDs:
+        <textarea
+          id="gDriveFileIds"
+          rows="2"
+          required
+          placeholder="id1,id2,id3,..."
+        ></textarea>
+      </label>
+      <div class="form-actions">
+        <button type="submit">Save</button>
+        <button type="button" id="gDriveCancelBtn" class="cancel-btn">
+          Cancel
+        </button>
+      </div>
+    </form>
+
+    <header>Enterprise Blog</header>
+    <main class="container">
+      <section class="search-bar">
+        <label for="searchInput">Search Blogs:</label>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by title or author..."
+          autocomplete="off"
+        />
+        <ul id="suggestionList" class="suggestion-list"></ul>
+      </section>
+      <a href="/blogs/create"
+        ><button class="create-btn">Create New Blog</button></a
+      >
+      <ul id="blogList" class="blog-list">
+        <li th:each="blog : ${blogs}">
+          <a
+            th:href="@{/blogs/view/{id}(id=${blog.id})}"
+            th:text="${blog.title}"
+            class="blog-title"
+          ></a>
+          <span class="author" th:text="'by ' + ${blog.author}"></span>
+          <span
+            class="created-at"
+            th:text="${#temporals.format(blog.createdAt, 'dd MMM yyyy HH:mm')}"
+          ></span>
+          <span class="actions">
+            <a th:href="@{/blogs/edit/{id}(id=${blog.id})}">Edit</a>
+            <a th:href="@{/blogs/delete/{id}(id=${blog.id})}">Delete</a>
+          </span>
+        </li>
+      </ul>
+    </main>
+    <script th:src="@{/js/main.js}"></script>
+  </body>
+</html>
