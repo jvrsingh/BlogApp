@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.blog.payload.PostDto;
 import com.example.blog.payload.PostResponse;
 import com.example.blog.service.PostService;
+import com.example.blog.utils.AppConstants;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class PostController {
     public PostController(PostService postService) {
         this.postService = postService;
     }
+    
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto){
@@ -37,10 +39,12 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<PostResponse> getAllPost(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-                                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-                                                    @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-                                                    @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {  
+    public ResponseEntity<PostResponse> getAllPost(
+        @RequestParam(
+        value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+        @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+        @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+        @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {  
         return new ResponseEntity<>(postService.getAllPost(pageNo, pageSize, sortBy,sortDir), HttpStatus.OK);
     }
 
